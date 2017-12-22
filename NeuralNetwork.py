@@ -100,9 +100,14 @@ class NeuralNetwork:
         score = 0
         for i in range(len(preds)):
             pred = np.around(preds[i],1)
-            if pred[0] == test_y[i][0] and pred[1] == test_y[i][1]:
-                score +=1
-        return score/len(test_y)
+            try:
+                if pred[0] == test_y[i][0]:
+                    score +=1
+                return score/len(test_y)
+            except:
+                print(len(pred),len(test_y))
+                print("pred:{}, test_y:{}".format(pred,test_y))
+                return 404
 
     def save(self,model_name):
         np.save('{}'.format(model_name),(self.w))

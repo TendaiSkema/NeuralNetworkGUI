@@ -156,7 +156,7 @@ class NeuralNetwork:
                 acc = self.get_acc(test_x,test_y)
                 if visualize:
                     vr.animat_graph(i,steps,acc,last_loss)
-                print('Epoch: {}, time: {}ms, state: {}%'.format(i,round(time()-s_time,6),int((i/epochs)*100)))
+                print('Epoch: {}, time: {}s, state: {}%'.format(i,round(time()-s_time,6),int((i/epochs)*100)))
                 print('NN1 loss: {}, acc: {}'.format(round(last_loss,7),round(acc,7)))
                 print('----------------------------------------------------')
                 

@@ -1,6 +1,7 @@
 import pygame
 from random import randrange as rand
 import numpy as np
+from collections import Counter
 
 class Game:
         def __init__(self,is_machine,do_save,save_name=None):
@@ -64,7 +65,7 @@ class Game:
                                         self.ground_blocks.append(new_ground)
                                         self.counter = self.block_size
                                         last_block_not_solid = False
-                                else:
+                                elif not last_block_not_solid:
                                         new_ground = Ground(self.ground_level,self.screen_with-1,self.ground_image_path,self.block_size,False)
                                         self.ground_blocks.append(new_ground)
                                         self.counter = self.block_size
@@ -115,7 +116,7 @@ class Game:
                                 self.ground_blocks.append(new_ground)
                                 self.counter = self.block_size
                                 self.last_block_not_solid = False
-                        else:
+                        elif not self.last_block_not_solid:
                                 new_ground = Ground(self.ground_level,self.screen_with-1,self.ground_image_path,self.block_size,False)
                                 self.ground_blocks.append(new_ground)
                                 self.counter = self.block_size
@@ -138,7 +139,7 @@ class Game:
 
                 #final updates
                 pygame.display.update()         #update all
-                self.clock.tick(60)                  #wait
+                self.clock.tick(60)
                 return run,self.binary_interpreter()
 
         def update_ground(self):
@@ -175,35 +176,15 @@ class Game:
                 return binarry_array
 
         def balance_data(self,array):
-                zeros = 0
-                ones = 0
-                for element in array:
-                        if element[1]:
-                                ones+=1
-                        else:
-                                zeros+=1
-                if zeros<ones:
-                        diff = ones-zeros
-                        print(diff)
+                counted_array = Counter([a[1][0] for a in array])
+                while counted_array[1]< counted_array[0]:
                         for element in array:
-                                if element[1]:
+                                if element[1][0] == 0:
                                         array.remove(element)
-                                        diff-=1
-                                        if diff == 0:
-                                                break
-                if zeros>ones:
-                        diff = zeros-ones
-                        print(diff)
-                        for element in array:
-                                if not element[1]:
-                                        array.remove(element)
-                                        diff-=1
-                                        if diff == 0:
-                                                break
-
+                                        counted_array = Counter([a[1][0] for a in array])
+                                        break
                 return array
                                 
-        
 class Ground:
         
         def __init__(self,y_pos,x_pos,image_path,size,solid):

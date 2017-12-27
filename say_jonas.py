@@ -17,11 +17,12 @@ test_X = X
 test_Y = Y
 
 epochs = 1000
-steps = 1000
-LR = 1e-3
+steps = 10000
+LR = 1e-2
 
-NN = NeuralNetwork(4,[256,128,64],1,False,show_after_init=False)
-NN.train(X,Y,test_X,test_Y,LR,epochs,steps,0,visualize=True,tqdm_=True)
+NN = NeuralNetwork(4,[3,2],1,False,show_after_init=False)
+print("start Training (Enter to continue)")
+NN.train(X,Y,test_X,test_Y,LR,epochs,steps,0,visualize=True,tqdm_=False)
 
 run = True
 machine_game = Testgame.Game(True,False)

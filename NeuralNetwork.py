@@ -94,22 +94,17 @@ class NeuralNetwork:
             self.w[i] = self.w[i]-LR*dJw[-(i+1)]
 
     def predict(self,X):
-        out = self.forward(X)
+        out = np.around(self.forward(X),1)
         return out
 
     def get_acc(self,test_x,test_y):
         preds = self.forward(test_x)
+        preds = np.around(preds,1)
         score = 0
         for i in range(len(preds)):
-            pred = np.around(preds[i],1)
-            try:
-                if pred[0] == test_y[i][0]:
-                    score +=1
-                return score/len(test_y)
-            except:
-                print(len(pred),len(test_y))
-                print("pred:{}, test_y:{}".format(pred,test_y))
-                return 404
+            if (preds[i] == test_y[i]).all():
+                score +=1
+        return score/len(test_y)
 
     def save(self,model_name):
         np.save('{}'.format(model_name),(self.w))
@@ -157,9 +152,10 @@ class NeuralNetwork:
             
                 acc = self.get_acc(test_x,test_y)
                 if visualize:
-                    _thread.start_new_thread(vr.animat_graph,(i,steps,acc,last_loss))
-                    #vr.animat_graph,(i,steps,acc,last_loss)
-                print('Epoch: {}, time: {}ms, state: {}%'.format(i,round(time()-s_time,6),int((i/epochs)*100)))
+                    #_thread.start_new_thread(vr.animat_graph,(i,steps,acc,last_loss))
+                    vr.animat_graph(i,steps,acc,last_loss)
+                    
+                print('Epoch: {}, time: {}s, state: {}%'.format(i,round(time()-s_time,6),round((i/epochs)*100,1)))
                 print('NN1 loss: {}, acc: {}'.format(round(last_loss,7),round(acc,7)))
                 print('----------------------------------------------------')
                 

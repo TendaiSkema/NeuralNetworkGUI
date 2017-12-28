@@ -10,23 +10,22 @@ class Visualizer:
         if live_vew:
 
             self.epochs = epochs
-
             style.use("dark_background")
-            self.Network = plt.subplot2grid((7,2),(0,0),rowspan=4,colspan=2)
+
+            fig = plt.figure()
+            
+            self.Network = fig.subplot2grid((7,2),(0,0),rowspan=4,colspan=2)
             self.Network.set_title('Neuronen')
             self.show_network(in_size,layer_size,out_size)
             
                                     #gridsize,stardingpoint,rowspan,columnspan
-            self.acc_graph = plt.subplot2grid((7,2),(5,0),colspan=1,rowspan=2)
+            self.acc_graph = fig.subplot2grid((7,2),(5,0),colspan=1,rowspan=2)
             self.acc_graph.set_title("Accuracy")
             self.acc_graph.axis([0,epochs,0,1])
-            plt.ion()
 
             self.loss_graph = plt.subplot2grid((7,2),(5,1),colspan=1,rowspan=2)
             self.loss_graph.set_title("Loss")
             self.loss_graph.axis([0,epochs,0,5])
-            plt.ion()
-
 
     def animat_graph(self,epoch,steps,acc,loss):
         self.acc_graph.scatter(epoch, acc,s=[5,5],c="b")
@@ -34,7 +33,7 @@ class Visualizer:
         self.losses.append(loss)
         self.loss_graph.axis([0,self.epochs,0,self.losses[0]])
         self.loss_graph.scatter(epoch, loss,s=[5,5],c="r")
-        plt.pause(0.005)
+        plt.pause(0.000005)
         
     def show_graph(self,epoch,steps):
         iterations = epoch*steps

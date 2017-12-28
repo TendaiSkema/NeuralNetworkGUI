@@ -1,5 +1,6 @@
 import pygame
 from random import randrange as rand
+from random import shuffle
 import numpy as np
 from collections import Counter
 
@@ -133,13 +134,12 @@ class Game:
                 if not self.player.alive:
                         run = False
                         pygame.quit()
-                        return run
+                        return run,None
                                 
                 self.player.draw(self.screen)
 
                 #final updates
                 pygame.display.update()         #update all
-                self.clock.tick(60)
                 return run,self.binary_interpreter()
 
         def update_ground(self):
@@ -172,18 +172,21 @@ class Game:
         def binary_interpreter(self):
                 binarry_array = []
                 for gnd in self.ground_blocks[2:6]:
-                        binarry_array.append(int(gnd.solid))
+                        binarry_array.append(int(not gnd.solid))
                 return binarry_array
 
         def balance_data(self,array):
                 counted_array = Counter([a[1][0] for a in array])
                 while counted_array[1]< counted_array[0]:
+                        shuffle(array)
                         for element in array:
                                 if element[1][0] == 0:
                                         array.remove(element)
                                         counted_array = Counter([a[1][0] for a in array])
                                         break
                 return array
+        def Quit(self):
+                pygame.quit()
                                 
 class Ground:
         

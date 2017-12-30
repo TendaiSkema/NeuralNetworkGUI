@@ -51,8 +51,8 @@ test_Y = Y_s[:100]
 X = X_es[100:]
 Y = Y_s[100:]
 
-epochs = 1000
-steps = 10
+epochs = 10
+steps = 1000
 LR = 1e-3
 
 NN = NeuralNetwork(4,[3,2],1,False,show_after_init=False)

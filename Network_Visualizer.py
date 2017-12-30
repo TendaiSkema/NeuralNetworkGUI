@@ -1,50 +1,36 @@
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from matplotlib import style
 import numpy as np
 
 class Visualizer:
-    def __init__(self,live_vew=False,epochs=None,steps=None,in_size=None,layer_size=None,out_size=None):
+    def __init__(self):
         self.losses = []
         self.accs = []
+        self.x_values = []
+
+    def animat_graph(self,i):
         
-        if live_vew:
-
-            self.epochs = epochs
-            style.use("dark_background")
-
-            fig = plt.figure()
+        if len(self.x_values)>10:
+            xs = self.x_values[-10:]
+            acc_ys = self.accs[-10:]
+            loss_ys = self.losses[-10:]
             
-            self.Network = fig.subplot2grid((7,2),(0,0),rowspan=4,colspan=2)
-            self.Network.set_title('Neuronen')
-            self.show_network(in_size,layer_size,out_size)
-            
-                                    #gridsize,stardingpoint,rowspan,columnspan
-            self.acc_graph = fig.subplot2grid((7,2),(5,0),colspan=1,rowspan=2)
-            self.acc_graph.set_title("Accuracy")
-            self.acc_graph.axis([0,epochs,0,1])
+        else:
+            xs = self.x_values
+            acc_ys = self.accs
+            loss_ys = self.losses
+        
+        self.acc_graph.clear()
+        self.loss_graph.clear()
+        
+        self.acc_graph.plot(xs, acc_ys,"b-")
+        self.loss_graph.plot(xs, loss_ys,"r-")
 
-            self.loss_graph = plt.subplot2grid((7,2),(5,1),colspan=1,rowspan=2)
-            self.loss_graph.set_title("Loss")
-            self.loss_graph.axis([0,epochs,0,5])
-
-    def animat_graph(self,epoch,steps,acc,loss):
-        self.acc_graph.scatter(epoch, acc,s=[5,5],c="b")
-        self.accs.append(acc)
+    def save_animat_graph(self,epoch,acc,loss):
         self.losses.append(loss)
-        self.loss_graph.axis([0,self.epochs,0,self.losses[0]])
-        self.loss_graph.scatter(epoch, loss,s=[5,5],c="r")
-        plt.pause(0.000005)
-        
-    def show_graph(self,epoch,steps):
-        iterations = epoch*steps
-        x_values_loss = range(iterations)
-        x_values_acc = []
-        for x_value in range(epoch):
-            x_values_acc.append(x_value*steps)
-
-        loss_graph = plt.plot(x_values_loss,self.losses,"r-")
-        acc_graph = plt.plot(x_values_acc,self.accs,"b-")
-        plt.show()
+        self.accs.append(acc)
+        self.x_values.append(epoch)
 
     def show_network(self,input_size,layers,output_size):
         #------------------offset berechnung------------------
@@ -76,3 +62,24 @@ class Visualizer:
             x_values.append(layer_index)
         #----------------------Anzeigen------------------------
         self.Network = plt.scatter(x_values,hole_network,c="g",s=[20,20])
+
+    def start_animation(self,epochs,steps,in_size,layer_size,out_size):
+        
+        self.epochs = epochs
+        style.use("dark_background")
+
+        fig = plt.figure()
+            
+        self.Network = fig.add_subplot(212)
+        self.Network.set_title('Neuronen')
+        self.show_network(in_size,layer_size,out_size)
+            
+                                    #gridsize,stardingpoint,rowspan,columnspan
+        self.acc_graph = fig.add_subplot(222)
+        self.acc_graph.set_title("Accuracy")
+
+        self.loss_graph = fig.add_subplot(221)
+        self.loss_graph.set_title("Loss")
+
+        ani = animation.FuncAnimation(fig, self.animat_graph, interval=1000)
+        plt.show()

@@ -116,7 +116,8 @@ class NeuralNetwork:
 
     def train(self,X,Y,test_x,test_y,LR=0.001,epochs=10,steps=2500,jump_value=0,visualize=False,tqdm_=False):
         if visualize:
-            vr = Visualizer(True,epochs,steps,self.in_size,self.layer_size,self.out_size)
+            vr = Visualizer()
+            _thread.start_new_thread(vr.start_animation,(epochs,steps,self.in_size,self.layer_size,self.out_size))
 
         print('----------------------------------------------------')
         
@@ -151,10 +152,10 @@ class NeuralNetwork:
                             self.fit(dJw,LR)
             
                 acc = self.get_acc(test_x,test_y)
+                
                 if visualize:
-                    #_thread.start_new_thread(vr.animat_graph,(i,steps,acc,last_loss))
-                    vr.animat_graph(i,steps,acc,last_loss)
-                    
+                    vr.save_animat_graph(i,acc,last_loss)
+
                 print('Epoch: {}, time: {}s, state: {}%'.format(i,round(time()-s_time,6),round((i/epochs)*100,1)))
                 print('NN1 loss: {}, acc: {}'.format(round(last_loss,7),round(acc,7)))
                 print('----------------------------------------------------')

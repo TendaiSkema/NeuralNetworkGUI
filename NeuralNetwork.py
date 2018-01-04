@@ -117,7 +117,7 @@ class NeuralNetwork:
     def train(self,X,Y,test_x,test_y,LR=0.001,epochs=10,steps=2500,jump_value=0,visualize=False,tqdm_=False):
         if visualize:
             vr = Visualizer()
-            _thread.start_new_thread(vr.start_animation,(epochs,steps,self.in_size,self.layer_size,self.out_size))
+            vr.start_animation,(epochs,steps,self.in_size,self.layer_size,self.out_size)
 
         print('----------------------------------------------------')
         

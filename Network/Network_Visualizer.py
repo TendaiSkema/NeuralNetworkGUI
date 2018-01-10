@@ -1,6 +1,3 @@
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from matplotlib import style
 import numpy as np
 
 class Visualizer:
@@ -9,30 +6,14 @@ class Visualizer:
         self.accs = []
         self.x_values = []
 
-    def animat_graph(self,i):
         
-        if len(self.x_values)>10:
-            xs = self.x_values[-10:]
-            acc_ys = self.accs[-10:]
-            loss_ys = self.losses[-10:]
-            
-        else:
-            xs = self.x_values
-            acc_ys = self.accs
-            loss_ys = self.losses
-        
-        self.acc_graph.clear()
-        self.loss_graph.clear()
-        
-        self.acc_graph.plot(xs, acc_ys,"b-")
-        self.loss_graph.plot(xs, loss_ys,"r-")
 
     def save_animat_graph(self,epoch,acc,loss):
         self.losses.append(loss)
         self.accs.append(acc)
         self.x_values.append(epoch)
 
-    def show_network(self,input_size,layers,output_size):
+    def show_network(self,input_size,layers,output_size,weights):
         #------------------offset berechnung------------------
         max_layer_size = input_size
         for i in layers:
@@ -60,8 +41,14 @@ class Visualizer:
         for i in range(1,output_size+1):
             hole_network.append(i+offset)
             x_values.append(layer_index)
-        #----------------------Anzeigen------------------------
-        self.Network = plt.scatter(x_values,hole_network,c="g",s=[20,20])
+        #--------------------weights aufbereitung---------------
+
+
+            
+        #--------------------ready for Output-------------------
+            
+        x_values #layers
+        hole_network #Neuron
 
     def start_animation(self,epochs,steps,in_size,layer_size,out_size):
         

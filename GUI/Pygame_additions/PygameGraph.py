@@ -30,6 +30,7 @@ class Graph:
         def update(self,points):
 
                 #draw main window
+                print((self.x_offset-1,self.y_offset-1,self.rec_size[0]+1,self.rec_size[1]+1))
                 pygame.draw.rect(self.screen, self.WHITE, (self.x_offset-1,self.y_offset-1,self.rec_size[0]+1,self.rec_size[1]+1))
                 
                 #if the point array has less then 2 elements jump over 
@@ -51,3 +52,7 @@ class Graph:
                                 #draw the line
                                 pygame.draw.line(self.screen,self.color,(x1,y1),(x2,y2),self.line_width)
                         pygame.draw.rect(self.screen, self.BLACK, (self.x_offset-self.edge,self.y_offset-self.edge,self.rec_size[0]+self.edge+2,self.rec_size[1]+self.edge+2),self.edge)
+
+        def get_info(self):
+                return {"start":(self.x_offset,self.y_offset),"size":self.size,"rect":self.rec_size}
+                
